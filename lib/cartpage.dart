@@ -23,23 +23,42 @@ class ShoppingCartPage extends StatefulWidget {
 }
 
 class _ShoppingCartPageState extends State<ShoppingCartPage> {
+  List<Map<String, dynamic>> cartItems = [
+    {'name': 'Product 1', 'price': 10.00, 'quantity': 2},
+    {'name': 'Product 2', 'price': 10.00, 'quantity': 7},
+    {'name': 'Product 3', 'price': 10.00, 'quantity': 3},
+    {'name': 'Product 4', 'price': 10.00, 'quantity': 4},
+    {'name': 'Product 5', 'price': 10.00, 'quantity': 8},
+  ];
+
   @override
   Widget build(BuildContext context) {
+    double total = cartItems.fold(
+        0, (total, item) => total + (item['price'] * item['quantity']));
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Shopping Cart'),
       ),
       body: ListView.builder(
-        itemCount: 5, // Number of items in the cart
+        itemCount: cartItems.length,
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
             leading: Icon(Icons.shopping_cart),
-            title: Text('Product ${(index + 1)}'),
-            subtitle: Text('Price: \$10.00'),
+            title: Text(cartItems[index]['name']),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Price: \$${cartItems[index]['price']}'),
+                Text('Quantity: ${cartItems[index]['quantity']}'),
+              ],
+            ),
             trailing: IconButton(
               icon: Icon(Icons.delete),
               onPressed: () {
-                // Remove item from cart
+                setState(() {
+                  cartItems.removeAt(index);
+                });
               },
             ),
           );
@@ -52,7 +71,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                'Total: \$50.00',
+                'Total: \$${total.toStringAsFixed(2)}',
                 style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
               ),
               ElevatedButton(
