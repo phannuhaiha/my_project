@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/information.dart';
 
 void main() {
   runApp(MyApp());
@@ -76,7 +77,12 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  // Proceed to checkout
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            InformationPage()), // Thay YourOtherPage() bằng tên của trang bạn muốn điều hướng đến
+                  );
                 },
                 child: Text('Checkout'),
               ),
