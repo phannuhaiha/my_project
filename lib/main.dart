@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:my_project/product.dart';
 import 'package:flutter/material.dart';
+import 'package:my_project/cartpage.dart';
 
 void main() => runApp(
   MaterialApp(
@@ -25,7 +26,10 @@ class HomePage extends StatelessWidget {
             icon: Icon(Icons.notifications_none, color: Colors.black,),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MyApp()), // Thay YourOtherPage() bằng tên của trang bạn muốn điều hướng đến
+            );},
             icon: Icon(Icons.shopping_cart, color: Colors.black,),
           )
         ],
