@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/orderconfirmation.dart';
 
 void main() {
   runApp(InformationPage());
@@ -80,13 +81,18 @@ class _AddressInputPageState extends State<AddressInputPage> {
             ),
             SizedBox(height: 20.0),
             // Sử dụng hàm xác nhận đơn hàng
-            Expanded(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: ElevatedButton(
-                  onPressed: _confirmOrder,
-                  child: Text('Xác nhận'),
-                ),
+            SizedBox(
+              width: double.infinity, // Mở rộng nút theo chiều ngang
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OrderConfirmPage(),
+                    ),
+                  );
+                },
+                child: Text('Confirm'),
               ),
             ),
           ],
@@ -95,5 +101,3 @@ class _AddressInputPageState extends State<AddressInputPage> {
     );
   }
 }
-
-
