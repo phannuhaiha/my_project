@@ -8,7 +8,7 @@ class InformationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Nhập Thông tin',
+      title: 'Nhập Thông tin giao hàng',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
