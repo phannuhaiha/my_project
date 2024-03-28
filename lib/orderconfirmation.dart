@@ -1,25 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/ordersuccess.dart';
-
-void main() {
-  runApp(OrderConfirmPage());
-}
-
-class OrderConfirmPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Order Confirmation',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: OrderConfirmationPage(),
-    );
-  }
-}
+import 'package:my_project/information.dart';
 
 class OrderConfirmationPage extends StatelessWidget {
-  @override
+  final ShippingAddress shippingAddress;
+  final List<Map<String, dynamic>> cartItems;
+
+OrderConfirmationPage({required this.shippingAddress, required this.cartItems});  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -39,15 +26,15 @@ class OrderConfirmationPage extends StatelessWidget {
             ),
             SizedBox(height: 10.0),
             Text(
-              'Name: Đừu Mạnh Lam',
+              'Name: ${shippingAddress.name}',
               style: TextStyle(fontSize: 18.0),
             ),
             Text(
-              'Address: 123 Bình Thạnh, Hồ Chí Minh',
+              'Address: ${shippingAddress.street}, ${shippingAddress.city}',
               style: TextStyle(fontSize: 18.0),
             ),
             Text(
-              'Phone: 123456789',
+              'Phone: ${shippingAddress.phone}',
               style: TextStyle(fontSize: 18.0),
             ),
             SizedBox(height: 20.0),
@@ -61,12 +48,12 @@ class OrderConfirmationPage extends StatelessWidget {
             SizedBox(height: 10.0),
             Expanded(
               child: ListView.builder(
-                itemCount: 3, // Số lượng sản phẩm trong đơn hàng
+                itemCount: cartItems.length, // Số lượng sản phẩm trong đơn hàng
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text('Product ${index + 1}'),
-                    subtitle: Text('Price: \$10.00'), // Giá của mỗi sản phẩm
-                    trailing: Text('Quantity: 1'), // Số lượng của mỗi sản phẩm
+                    title: Text(cartItems[index]['name']),
+                    subtitle: Text('Price: \$${cartItems[index]['price']}'), // Giá của mỗi sản phẩm
+                    trailing: Text('Quantity: ${cartItems[index]['quantity']}'), // Số lượng của mỗi sản phẩm
                   );
                 },
               ),

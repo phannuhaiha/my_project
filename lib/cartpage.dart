@@ -1,8 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/information.dart';
+import 'package:provider/provider.dart';
+
+// Class để lưu trữ trạng thái của giỏ hàng
+class CartItems extends ChangeNotifier {
+  List<Map<String, dynamic>> _items = [];
+
+  List<Map<String, dynamic>> get items => _items;
+
+  void addToCart(Map<String, dynamic> product) {
+    // Thêm sản phẩm vào giỏ hàng
+    _items.add(product);
+    // Cập nhật tổng
+    double total = _items.fold(
+      0,
+      (total, item) => total + (item['price'] ?? 0),
+    );
+    // Thông báo cho các widget người tiêu dùng biết rằng dữ liệu đã thay đổi
+    notifyListeners();
+  }
+
+  void increaseQuantity(String productName) {
+    // Tăng số lượng của sản phẩm trong giỏ hàng lên 1
+    for (int i = 0; i < _items.length; i++) {
+      if (_items[i]['name'] == productName) {
+        _items[i]['quantity'] += 1;
+        break;
+      }
+    }
+    // Thông báo cho các widget người tiêu dùng biết rằng dữ liệu đã thay đổi
+    notifyListeners();
+  }
+
+  void removeFromCart(int index) {
+    // Xóa sản phẩm khỏi giỏ hàng
+    _items.removeAt(index);
+    // Thông báo cho các widget người tiêu dùng biết rằng dữ liệu đã thay đổi
+    notifyListeners();
+  }
+}
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    // Sử dụng MultiProvider để cung cấp cả CartItems cho cả Product và ShoppingCartPage
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CartItems()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -10,32 +57,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Shopping Cart',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
       home: ShoppingCartPage(),
     );
   }
 }
 
-class ShoppingCartPage extends StatefulWidget {
-  @override
-  _ShoppingCartPageState createState() => _ShoppingCartPageState();
-}
-
-class _ShoppingCartPageState extends State<ShoppingCartPage> {
-  List<Map<String, dynamic>> cartItems = [
-    {'name': 'Product 1', 'price': 10.00, 'quantity': 2},
-    {'name': 'Product 2', 'price': 10.00, 'quantity': 7},
-    {'name': 'Product 3', 'price': 10.00, 'quantity': 3},
-    {'name': 'Product 4', 'price': 10.00, 'quantity': 4},
-    {'name': 'Product 5', 'price': 10.00, 'quantity': 8},
-  ];
-
+class ShoppingCartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Lấy danh sách sản phẩm từ giỏ hàng
+    List<Map<String, dynamic>> cartItems =
+        Provider.of<CartItems>(context).items;
+
     double total = cartItems.fold(
-        0, (total, item) => total + (item['price'] * item['quantity']));
+        0,
+        (total, item) =>
+            total + ((item['price'] ?? 0) * (item['quantity'] ?? 0)));
 
     return Scaffold(
       appBar: AppBar(
@@ -51,15 +88,15 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Price: \$${cartItems[index]['price']}'),
-                Text('Quantity: ${cartItems[index]['quantity']}'),
+                Text('Quantity: 1'),
               ],
             ),
             trailing: IconButton(
               icon: Icon(Icons.delete),
               onPressed: () {
-                setState(() {
-                  cartItems.removeAt(index);
-                });
+                // Xóa sản phẩm khỏi giỏ hàng khi nhấn vào nút Xóa
+                Provider.of<CartItems>(context, listen: false)
+                    .removeFromCart(index);
               },
             ),
           );
@@ -77,11 +114,14 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
               ),
               ElevatedButton(
                 onPressed: () {
+                  List<Map<String, dynamic>> cartItems =
+                      Provider.of<CartItems>(context, listen: false).items;
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            InformationPage()), // Thay YourOtherPage() bằng tên của trang bạn muốn điều hướng đến
+                            InformationPage(cartItems: cartItems)), // Thay YourOtherPage() bằng tên của trang bạn muốn điều hướng đến
                   );
                 },
                 child: Text('Checkout'),

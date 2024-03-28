@@ -1,11 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/cartpage.dart';
 import 'package:my_project/orderconfirmation.dart';
+import 'dart:core';
 
-void main() {
-  runApp(InformationPage());
+
+class ShippingAddress {
+  final String name;
+  final String street;
+  final String city;
+  final String phone;
+
+  ShippingAddress({
+    required this.name,
+    required this.street,
+    required this.city,
+    required this.phone,
+  });
 }
 
 class InformationPage extends StatelessWidget {
+  final List<Map<String, dynamic>> cartItems;
+
+  InformationPage({required this.cartItems});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,12 +29,14 @@ class InformationPage extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: AddressInputPage(),
+      home: AddressInputPage(cartItems: cartItems),
     );
   }
 }
 
 class AddressInputPage extends StatefulWidget {
+   final List<Map<String, dynamic>> cartItems;
+   AddressInputPage({required this.cartItems});
   @override
   _AddressInputPageState createState() => _AddressInputPageState();
 }
@@ -30,10 +48,23 @@ class _AddressInputPageState extends State<AddressInputPage> {
   String _phone = '';
 
   // Hàm xác nhận đơn hàng
-  void _confirmOrder() {
-    print('Xác nhận đơn hàng:');
-    print('Tên: $_name');
-    print('Địa chỉ: $_street, $_city, $_phone');
+  void _confirmOrder(BuildContext context) {
+    // Tạo một đối tượng ShippingAddress từ thông tin nhập vào
+
+    ShippingAddress shippingAddress = ShippingAddress(
+      name: _name,
+      street: _street,
+      city: _city,
+      phone: _phone,
+    );
+
+    // Chuyển đến trang xác nhận đơn hàng và truyền thông tin địa chỉ giao hàng
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) =>
+       OrderConfirmationPage(shippingAddress: shippingAddress, cartItems: widget.cartItems,),
+      ),
+    );
   }
 
   @override
@@ -85,12 +116,7 @@ class _AddressInputPageState extends State<AddressInputPage> {
               width: double.infinity, // Mở rộng nút theo chiều ngang
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OrderConfirmPage(),
-                    ),
-                  );
+                 _confirmOrder(context); // Gọi hàm xác nhận đơn hàng
                 },
                 child: Text('Confirm'),
               ),

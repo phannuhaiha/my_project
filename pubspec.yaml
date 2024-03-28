@@ -25,6 +25,7 @@ dependencies:
   flutter:
     sdk: flutter
   animate_do: ^3.3.4
+  provider: ^5.0.0
 
 
 # Dependencies specify other packages that your package needs in order to work.
