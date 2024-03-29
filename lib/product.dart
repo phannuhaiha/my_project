@@ -143,7 +143,7 @@ class Product extends StatelessWidget {
                                         margin: EdgeInsets.only(right: 20),
                                         child: Center(
                                             child: Text(
-                                          '40',
+                                          'xanh',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold),
@@ -161,7 +161,7 @@ class Product extends StatelessWidget {
                                                 BorderRadius.circular(10)),
                                         child: Center(
                                             child: Text(
-                                          '42',
+                                          'Đen',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         )),
@@ -174,7 +174,7 @@ class Product extends StatelessWidget {
                                         margin: EdgeInsets.only(right: 20),
                                         child: Center(
                                             child: Text(
-                                          '44',
+                                          'Nâu',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold),
@@ -188,7 +188,7 @@ class Product extends StatelessWidget {
                                         margin: EdgeInsets.only(right: 20),
                                         child: Center(
                                             child: Text(
-                                          '46',
+                                          'Trắng',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold),
